@@ -18,7 +18,8 @@ def get_sub_url(types):
         product_links.append(product_link)
     return product_links
 def make_soup(url):
-    http = urllib3.ProxyManager('https://101.96.112.66:8080')
+    # http = urllib3.ProxyManager('https://101.96.112.66:8080')
+    http = urllib3.PoolManager()
     r = http.request('GET', url)
     return BeautifulSoup(r.data,'lxml')
 
@@ -89,35 +90,21 @@ def get_data(product, link, data):
     return success
 
 def soup_process(url):
-    index = []
-    product = []
-    product_item_id = []
-    name = []
-    brand = []
-    final_price = []
-    price_regular = []
-    sale_off = []
-    rate = []
-    numb_review = []
-    status = []
-    delivery = []
-    webpage = []
-    create_date = []
     data = {
-        'index': index,
-        'product' : product,
-        'product_item_id': product_item_id,
-        'name': name,
-        'brand': brand,
-        'final_price': final_price,
-        'price_regular': price_regular,
-        'sale_off': sale_off,
-        'rate': rate,
-        'numb_review': numb_review,
-        'status': status,
-        'delivery': delivery,
-        'webpage': webpage,
-        'create_date': create_date
+        'index': [],
+        'product' : [],
+        'product_item_id': [],
+        'name': [],
+        'brand': [],
+        'final_price': [],
+        'price_regular': [],
+        'sale_off': [],
+        'rate': [],
+        'numb_review': [],
+        'status': [],
+        'delivery': [],
+        'webpage': [],
+        'create_date': []
     }
 
     soup = make_soup(url)
@@ -132,7 +119,7 @@ def soup_process(url):
 
 def make_csv(data):
     df = pd.DataFrame(data)
-    df.to_csv('tiki.csv', index = False)
+    df.to_csv('tiki.csv', index = False, encoding='utf-8-sig')
 def main(url):
     # while url:
     data = soup_process(url)
